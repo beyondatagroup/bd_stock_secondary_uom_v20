@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_picking_form_inherit_secondary_uom" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.secondary.uom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add fields after Quantity / UoM -->
+            <xpath expr="//field[@name='move_ids']/list/field[@name='uom_id']" position="after">
+
+                <field name="allowed_secondary_uom_id"
+                       column_invisible="True"/>
+
+                <field name="secondary_done_qty"
+                       string="Secondary Done Qty"
+                       optional="show"
+                       readonly="not is_quantity_done_editable"
+                       column_invisible="parent.state == 'draft'"
+                       groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+                <field name="secondary_qty"
+                       string="Secondary Qty"
+                       optional="show"
+                       groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+                <field name="secondary_uom_id"
+                       string="Secondary UoM"
+                       optional="show"
+                       domain="[('id', '=', allowed_secondary_uom_id)]"
+                       options="{'no_create': True, 'no_open': True}"
+                       groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_stock_move_line_tree_secondary"
+            model="ir.ui.view">
+
+        <field name="name">stock.move.line.tree.secondary</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='uom_id']"
+                   position="after">
+
+                <field name="secondary_done_qty" optional="show"
+                       string="Secondary Qty" groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+                <field name="secondary_uom_id" optional="show"
+                       string="Secondary UoM" groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

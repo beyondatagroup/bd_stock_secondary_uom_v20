@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<odoo>
+    <data>
+        <record id="group_inventory_secondary" model="res.groups">
+            <field name="name">Secondary Unit on Inventory</field>
+        </record>
+    </data>
+</odoo>

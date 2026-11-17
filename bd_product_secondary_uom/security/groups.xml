@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<odoo>
+    <data>
+        <record id="group_product_secondary" model="res.groups">
+            <field name="name">Secondary Unit on Product</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_form_view_secondary_uom" model="ir.ui.view">
+        <field name="name">product.template.form.secondary.uom</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_general']/field[@name='type']"
+                   position="after">
+
+                <field name="is_secondary_unit"
+                       groups="bd_product_secondary_uom.group_product_secondary"/>
+
+                <field name="secondary_uom_id"
+                       groups="bd_product_secondary_uom.group_product_secondary"
+                       invisible="not is_secondary_unit" required="is_secondary_unit"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_form_view_secondary_uom" model="ir.ui.view">
+        <field name="name">product.product.form.secondary.uom</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="field[@name='uom_id']"
+                   position="after">
+
+                <field name="secondary_uom_id" optional="show"
+                       groups="bd_product_secondary_uom.group_product_secondary"
+                       invisible="not is_secondary_unit" readonly="1"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

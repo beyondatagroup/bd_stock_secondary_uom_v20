@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_picking_secondary_qty"
+              inherit_id="stock.report_picking">
+
+        <!-- =======================================================
+             HEADER : Add Secondary Quantity after Quantity
+        ======================================================== -->
+        <xpath expr="//th[@name='th_quantity']" position="after">
+            <th name="th_secondary_quantity" class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <strong>Secondary Quantity</strong>
+            </th>
+        </xpath>
+
+        <!-- =======================================================
+             MOVE ROW
+        ======================================================== -->
+        <xpath expr="//td[hasclass('o_td_quantity')]" position="after">
+            <td class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <t t-if="move.secondary_uom_id">
+                    <span t-field="move.secondary_qty"/>
+                    <span t-field="move.secondary_uom_id"/>
+                </t>
+            </td>
+        </xpath>
+
+        <!-- =======================================================
+             MOVE LINE ROW (Tracked Products)
+        ======================================================== -->
+        <xpath expr="//td[@class='text-end'][span[@t-out='format_number(line.quantity)']]" position="after">
+            <td class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <t t-if="line.move_id.secondary_uom_id">
+                    <span t-field="line.move_id.secondary_qty"/>
+                    <span t-field="line.move_id.secondary_uom_id"/>
+                </t>
+            </td>
+        </xpath>
+
+    </template>
+
+
+     <!-- ==========================================================
+         Delivery Slip / Goods Receipt Header
+    =========================================================== -->
+    <template id="report_delivery_document_inherit_secondary_qty"
+              inherit_id="stock.report_delivery_document">
+
+        <!-- Draft table -->
+        <xpath expr="//th[@name='th_sm_quantity']" position="after">
+            <th class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <strong>Secondary Qty</strong>
+            </th>
+        </xpath>
+
+        <!-- Done table -->
+        <xpath expr="//th[@name='th_sml_quantity']" position="after">
+            <th class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <strong>Secondary Qty</strong>
+            </th>
+        </xpath>
+
+    </template>
+
+
+    <!-- ==========================================================
+         Draft / Waiting / Assigned Picking
+    =========================================================== -->
+    <template id="report_delivery_document_move_secondary_qty"
+              inherit_id="stock.report_delivery_document">
+
+        <xpath expr="//table[@name='stock_move_table']//td[hasclass('o_td_quantity')][2]" position="after">
+
+            <td class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <t t-if="move.secondary_uom_id">
+                    <span t-field="move.secondary_qty"/>
+                    <span t-field="move.secondary_uom_id"/>
+                </t>
+            </td>
+
+        </xpath>
+
+    </template>
+
+
+    <!-- ==========================================================
+         Done Picking (Serial Number)
+    =========================================================== -->
+    <template id="stock_report_delivery_has_serial_move_line_secondary"
+              inherit_id="stock.stock_report_delivery_has_serial_move_line">
+
+        <xpath expr="//td[@name='move_line_lot_quantity']"
+               position="after">
+
+            <td class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <t t-if="move_line.move_id.secondary_uom_id">
+                    <span t-field="move_line.move_id.secondary_done_qty"/>
+                    <span t-field="move_line.move_id.secondary_uom_id"/>
+                </t>
+            </td>
+
+        </xpath>
+
+    </template>
+
+
+    <!-- ==========================================================
+         Done Picking (Aggregated Lines)
+    =========================================================== -->
+    <template id="stock_report_delivery_aggregated_move_lines_secondary"
+              inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+
+        <xpath expr="//td[@name='move_line_aggregated_quantity']"
+               position="after">
+
+            <td class="text-end" groups="bd_stock_secondary_uom.group_inventory_secondary">
+                <t t-if="aggregated_lines[line].get('secondary_uom')">
+                    <span t-out="aggregated_lines[line].get('secondary_qty', 0.0)"/>
+                    <span t-out="aggregated_lines[line]['secondary_uom'].name"/>
+                </t>
+            </td>
+
+        </xpath>
+
+    </template>
+</odoo>

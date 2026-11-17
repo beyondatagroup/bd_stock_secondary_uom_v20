@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Scrap Form View Inherit -->
+    <record id="view_stock_scrap_form_secondary_qty" model="ir.ui.view">
+        <field name="name">stock.scrap.move.form.secondary.qty</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_scrap_move_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[field[@name='quantity']]" position="after">
+                <field name="allowed_secondary_uom_id" invisible="1"/>
+
+                <label for="secondary_done_qty" string="Secondary Qty"
+                       invisible="not allowed_secondary_uom_id"/>
+
+                <div class="o_row" invisible="not allowed_secondary_uom_id">
+                    <field name="secondary_done_qty"
+                           class="oe_inline"
+                           readonly="1"
+                           groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+                    <field name="secondary_uom_id"
+                           class="oe_inline"
+                           domain="[('id', '=', allowed_secondary_uom_id)]"
+                           options="{'no_create': True, 'no_open': True}"
+                           readonly="state in ('done', 'cancel')"
+                           groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Scrap List View Inherit -->
+    <record id="view_stock_scrap_list_secondary_qty" model="ir.ui.view">
+        <field name="name">stock.scrap.move.list.secondary.qty</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_scrap_move_list"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='uom_id']" position="after">
+                <field name="secondary_done_qty"
+                       string="Secondary Qty"
+                       optional="show"
+                       readonly="1"
+                       groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+
+                <field name="secondary_uom_id"
+                       string="Secondary UoM"
+                       optional="show"
+                       readonly="1"
+                       groups="bd_stock_secondary_uom.group_inventory_secondary"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
